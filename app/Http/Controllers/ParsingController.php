@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Contracts\ParsedDataInterface;
 use Goutte\Client;
 use GuzzleHttp\Client as GuzzleClient;
+use Illuminate\Http\Request;
+
 
 
 class ParsingController extends Controller
@@ -20,13 +22,23 @@ class ParsingController extends Controller
         $this->parsedDataRepo = $parsedData;
     }
 
+    /**
+     * Scrap Data settings
+     *
+     * @return view
+     */
+    public function settings()
+    {
+        return view('welcome');
+    }
+
 
     /**
      * Scrap Data from url with value
      *
      * @return array|\Illuminate\Support\Collection
      */
-    public function index()
+    public function index(Request $request)
     {
 
         try {
@@ -40,7 +52,7 @@ class ParsingController extends Controller
             ));
 
             $client->setClient($guzzleClient);
-            $crawler = $client->request('GET', 'https://www.mbetthebookie.win/su/betting/11?periodGroupAllEvents=24');
+            $crawler = $client->request('GET', 'https://www.mbetthebookie.win/su/betting/11?periodGroupAllEvents='. $request['time']);
 
             $priceClass = '.price';
 
@@ -50,7 +62,7 @@ class ParsingController extends Controller
              * @param $node
              * @return array
              */
-                function ($node) {
+                function ($node) use($request) {
                     $text = strstr($node->text(), ')');
 
                     if ($text) {
@@ -59,9 +71,10 @@ class ParsingController extends Controller
                         $criterion = $node->text();
                     }
 
+                    $request = $request->all();
                     /** @var Values $criterion */
-                    $minVal = 1.30;
-                    $maxVal = 1.38;
+                    $minVal = !empty($request['min']) ? $request['min'] : 1.30;
+                    $maxVal = !empty($request['max']) ? $request['max'] : 1.38;
                     $data = [];
                     if (floatval($criterion) < $maxVal && floatval($criterion) > $minVal && $criterion != null) {
                         $criterion = (float)filter_var($criterion, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
@@ -73,19 +86,20 @@ class ParsingController extends Controller
 
                 });
 
+            
+
             /** @var array $data */
             $data = [];
             foreach ($prices as $price) {
                 if (!empty($price)) {
                     $manage = (array)json_decode($price['sel']);
                     $data[] = $manage;
-
                 }
             }
 
             /** @var Values $group */
-            $group = 3;
-            $countOnGroup = 4;
+            $group = !empty($request['group']) ? $request['group'] : 3;
+            $countOnGroup = !empty($request['count_on_group']) ? $request['count_on_group'] : 3;
 
             $output = array_slice($data, 0, $group * $countOnGroup);
 
@@ -103,6 +117,7 @@ class ParsingController extends Controller
             return view('parsed-data', compact('groupedData'));
 
         } catch (\Exception $exception) {
+            dd($exception);
             print_r('Request Failed');
         }
 

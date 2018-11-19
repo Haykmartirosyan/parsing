@@ -1,76 +1,72 @@
 @extends('layouts.app')
-
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="k-content__body	k-grid__item k-grid__item--fluid" id="k_content_body">
-                    <div class="k-portlet k-portlet--mobile">
-                        <div class="k-portlet__body" id="tableData">
-                            <p id="loading">Loading ...</p>
-                        </div>
+<div class="m-grid m-grid--hor m-grid--root m-page">
+    <!-- BEGIN: Header -->
+    @include('layouts.header')
+    <!-- END: Header -->        
+    <!-- begin::Body -->
+    <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
+        <!-- BEGIN: Left Aside -->
+        @include('layouts.sidebar')
+        <!-- END: Left Aside -->                            
+        <div class="m-content">
+                    <div class="row">
+    <div class="col-md-12">
+
+    
+
+        <!--begin::Portlet-->
+        <div class="m-portlet m-portlet--tab" style="width: 700px">
+        
+            <!--begin::Form-->
+            <form class="m-form m-form--fit m-form--label-align-right" action="/parsing/public/result">
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">Min</label>
+                        <input type="text" class="form-control m-input m-input--air m-input--pill" name="min" >
+                    </div>
+                     <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">Max</label>
+                        <input type="text" class="form-control m-input m-input--air m-input--pill" name="max" >
+                    </div>
+                     <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">Group</label>
+                        <input type="text" class="form-control m-input m-input--air m-input--pill" name="group" >
+                    </div>
+                     <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">Count On Group</label>
+                        <input type="text" class="form-control m-input m-input--air m-input--pill" name="count_on_group" >
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label for="exampleSelect1">Time</label>
+                        <select class="form-control m-input m-input--square" name="time">
+                            <option value="2">2</option>
+                            <option value="6">6</option>
+                            <option value="12">12</option>
+                            <option value="24">24</option>
+                        </select>
                     </div>
                 </div>
-            </div>
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <button type="submit" class="btn btn-brand">Submit</button>
+                        <button type="reset" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </div>
+            </form>
+            <!--end::Form-->            
         </div>
+        <!--end::Portlet-->
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            $.get('/parsing/public/parsing')
-                .done(function (response) {
-                    $.get('/parsing/public/parsing/getResult')
-                        .done(function (response) {
-                            createTableByData(response);
-                        });
-                });
-
-            setInterval(function () {
-                $.get('/parsing/public/parsing')
-                    .done(function (response) {
-                        console.log('updated', response);
-                    });
-            }, 120000);
-
-            setInterval(function () {
-                $.get('/parsing/public/parsing/getResult')
-                    .done(function (response) {
-                        createTableByData(response);
-                    });
-            }, 150000);
-
-            function createTableByData(data) {
-                var eTable = "<table class=\"table  table-bordered table-hover \" id=\"k_table_1\">" +
-                    "<thead>" +
-                    "<tr>" +
-                    "<th><b>#</b></th>" +
-                    "<th><b>Группа</b></th>" +
-                    "<th><b>Название</b></th>" +
-                    "<th><b>Ставка</b></th>" +
-                    "<th><b>Победа</b></th>" +
-                    "</tr>" +
-                    "</thead>" +
-                    "<tbody>";
-                $.each(data, function (index, row) {
-                    var win = 0;
-                    if (row.win !== null) {
-                        win = row.win
-                    }
-
-                    eTable += "<tr>";
-                    eTable += "<td>" + (index + 1) + "</td>";
-                    eTable += "<td><b>Группа: " + row.group + "</b></td>";
-                    eTable += "<td><b>" + row.name + "</b></td>";
-                    eTable += "<td><b><i>" + row.price + "</b></i></td>";
-                    eTable += "<td><b>" + win + "</i></td>";
-                    eTable += "</tr>";
-                });
-                eTable += "</tbody></table>";
-                $('loading').hide();
-                $('#tableData').html(eTable);
-            }
-        });
-    </script>
+</div>
+</div>
+      </div>
+  </div>
+<!-- end:: Page -->
+<!-- end::Quick Sidebar -->         
+<!-- begin::Scroll Top -->
+<div id="m_scroll_top" class="m-scroll-top">
+    <i class="la la-arrow-up"></i>
+</div>
 
 @endsection

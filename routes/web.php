@@ -15,6 +15,6 @@
 //    return view('welcome');
 //});
 
-Route::get('/', 'ParsingController@index');
-Route::get('/parsing/result', 'ParsingController@bestResults')->name('parsing');
+Route::get('/', 'ParsingController@settings');
+Route::get('/result', 'ParsingController@index');
 Route::get('/parsing/getResult', 'ParsingController@getResult');
