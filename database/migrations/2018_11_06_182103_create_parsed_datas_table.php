@@ -17,7 +17,10 @@ class CreateParsedDatasTable extends Migration
             $table->increments('id');
             $table->string('group');
             $table->string('name');
-            $table->string('price');
+            $table->string('price')->nullable();
+            $table->string('time')->nullable();
+            $table->string('league')->nullable();
+            $table->string('command')->nullable();
             $table->boolean('win')->nullable();
             $table->timestamps();
         });

@@ -7,8 +7,6 @@ use Goutte\Client;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Http\Request;
 
-
-
 class ParsingController extends Controller
 {
     protected $parsedDataRepo;
@@ -52,7 +50,7 @@ class ParsingController extends Controller
             ));
 
             $client->setClient($guzzleClient);
-            $crawler = $client->request('GET', 'https://www.mbetthebookie.win/su/betting/11?periodGroupAllEvents='. $request['time']);
+            $crawler = $client->request('GET', 'https://www.mbetthebookie.win/su/betting/11?periodGroupAllEvents=' . $request['time']);
 
             $priceClass = '.price';
 
@@ -62,7 +60,7 @@ class ParsingController extends Controller
              * @param $node
              * @return array
              */
-                function ($node) use($request) {
+                function ($node) use ($request) {
                     $text = strstr($node->text(), ')');
 
                     if ($text) {
@@ -80,22 +78,42 @@ class ParsingController extends Controller
                         $criterion = (float)filter_var($criterion, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                         $data['price'] = $criterion;
                         $data['sel'] = $node->attr('data-sel');
+                        $s = (array)json_decode($node->attr('data-sel'));
+                        $data['name'] = $s['sn'];
+                        $sel = json_decode($data['sel']);
+
+                        $parents = $node->parents()->text();
+
+                        $par = explode("\n", $parents);
+                        $team = explode(' ', $sel->sn);
+
+                        if (str_replace(' ', '', $team[0]) === explode(' ', $par[14])[1]) {
+                            $data['command'] = $par[14] . ' -' . $par[36];
+                            $data['time'] = str_replace(' ', '', $par[27]);
+                        }
                     }
 
                     return $data;
 
                 });
 
-            
+
 
             /** @var array $data */
             $data = [];
             foreach ($prices as $price) {
                 if (!empty($price)) {
-                    $manage = (array)json_decode($price['sel']);
-                    $data[] = $manage;
+                    $data[] = $price;
+//
+//                    $manage = (array)json_decode($price['sel']);
+//                    $data[] = $manage['sn'];
+//                    $data[] = $price['price'];
+//                    $data[] = isset($price['command']) ? $price['command'] : '';
+//                    $data[] = isset($price['time']) ? $price['time'] : '';
                 }
             }
+
+
 
             /** @var Values $group */
             $group = !empty($request['group']) ? $request['group'] : 3;
@@ -111,8 +129,24 @@ class ParsingController extends Controller
                     unset($groupedData[$key]);
                 }
             }
+            foreach ($groupedData as $index => $datum) {
+                foreach ($datum as $item) {
 
-            $groupedData = collect($groupedData);
+                    $item['group'] = $index + 1;
+                    $command = isset($item['command']) ? $item['command'] : '';
+                    $time = isset($item['time']) ? $item['time'] : '';
+                    $parsedData = [
+                        'group' => $item['group'],
+                        'name' => $item['name'],
+                        'command' => $command,
+                        'time' => $time,
+                        'price' => $item['price'],
+
+                    ];
+                    $this->parsedDataRepo->createOrUpdateData($parsedData);
+                }
+            }
+            $groupedData = $this->parsedDataRepo->all();
 
             return view('parsed-data', compact('groupedData'));
 

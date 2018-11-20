@@ -13,6 +13,8 @@ class ParsedData extends Model
       'name',
       'price',
       'win',
+      'command',
+      'time',
     ];
 
     /**
