@@ -11,7 +11,6 @@
         <!-- END: Left Aside -->
             <div class="m-grid__item m-grid__item--fluid m-wrapper">
                 <!-- END: Subheader -->
-                <div class="m-content">
                     <div class="m-portlet m-portlet--mobile">
                         <div class="m-portlet__body">
                             <div><h2 style="display:inline-block" id="time">02:00 </h2>
@@ -81,7 +80,6 @@
                     </div>
                     <!-- END EXAMPLE TABLE PORTLET-->               </div>
             </div>
-        </div>
         <!-- end:: Body -->
     </div>
     <!-- end:: Page -->

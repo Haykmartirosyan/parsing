@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-
 use App\Contracts\ParsedDataInterface;
 use App\ParsedData;
 
@@ -57,7 +56,7 @@ class ParsedDataRepository implements ParsedDataInterface
      */
     public function all()
     {
-        return $this->model->all();
+        return $this->model->orderBy('id', 'asc')->get();
     }
 
 

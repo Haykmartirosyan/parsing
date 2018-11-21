@@ -76,7 +76,13 @@ class ParsingController extends Controller
                     $data = [];
                     if (floatval($criterion) < $maxVal && floatval($criterion) > $minVal && $criterion != null) {
                         $criterion = (float)filter_var($criterion, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+                        $league = $node->parents()->parents()->parents()
+                            ->parents()->parents()->parents()->text();
+
+                        $lig = explode("\n", $league);
+
                         $data['price'] = $criterion;
+                        $data['league'] = $lig[14];
                         $data['sel'] = $node->attr('data-sel');
                         $s = (array)json_decode($node->attr('data-sel'));
                         $data['name'] = $s['sn'];
@@ -98,21 +104,13 @@ class ParsingController extends Controller
                 });
 
 
-
             /** @var array $data */
             $data = [];
             foreach ($prices as $price) {
                 if (!empty($price)) {
                     $data[] = $price;
-//
-//                    $manage = (array)json_decode($price['sel']);
-//                    $data[] = $manage['sn'];
-//                    $data[] = $price['price'];
-//                    $data[] = isset($price['command']) ? $price['command'] : '';
-//                    $data[] = isset($price['time']) ? $price['time'] : '';
                 }
             }
-
 
 
             /** @var Values $group */
@@ -131,7 +129,6 @@ class ParsingController extends Controller
             }
             foreach ($groupedData as $index => $datum) {
                 foreach ($datum as $item) {
-
                     $item['group'] = $index + 1;
                     $command = isset($item['command']) ? $item['command'] : '';
                     $time = isset($item['time']) ? $item['time'] : '';
@@ -141,7 +138,7 @@ class ParsingController extends Controller
                         'command' => $command,
                         'time' => $time,
                         'price' => $item['price'],
-
+                        'league' => $item['league'],
                     ];
                     $this->parsedDataRepo->createOrUpdateData($parsedData);
                 }
@@ -151,7 +148,6 @@ class ParsingController extends Controller
             return view('parsed-data', compact('groupedData'));
 
         } catch (\Exception $exception) {
-            dd($exception);
             print_r('Request Failed');
         }
 
