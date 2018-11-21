@@ -24,6 +24,7 @@ class ParsingController extends Controller
      * Scrap Data settings
      *
      * @return view
+     * @author Hayk M.
      */
     public function settings()
     {
@@ -34,11 +35,12 @@ class ParsingController extends Controller
     /**
      * Scrap Data from url with value
      *
-     * @return array|\Illuminate\Support\Collection
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @author Hayk M.
      */
     public function index(Request $request)
     {
-
         try {
             ini_set('max_execution_time', 3000);
 
