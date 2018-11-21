@@ -55,7 +55,6 @@ class ParsingController extends Controller
             $crawler = $client->request('GET', 'https://www.mbetthebookie.win/su/betting/11?periodGroupAllEvents=' . $request['time']);
 
             $priceClass = '.price';
-
             $prices = $crawler->filter($priceClass)->each(
 
             /**
@@ -102,9 +101,7 @@ class ParsingController extends Controller
                     }
 
                     return $data;
-
                 });
-
 
             /** @var array $data */
             $data = [];
@@ -114,17 +111,14 @@ class ParsingController extends Controller
                 }
             }
 
-
             /** @var Values $group */
             $group = !empty($request['group']) ? $request['group'] : 3;
             $countOnGroup = !empty($request['count_on_group']) ? $request['count_on_group'] : 3;
 
             $output = array_slice($data, 0, $group * $countOnGroup);
-
             $groupedData = array_chunk($output, $countOnGroup);
 
             foreach ($groupedData as $key => $data) {
-
                 if (count($data) != $countOnGroup) {
                     unset($groupedData[$key]);
                 }
