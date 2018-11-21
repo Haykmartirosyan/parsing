@@ -38,15 +38,6 @@
                                         <input type="text" class="form-control m-input m-input--air m-input--pill"
                                                name="count_on_group">
                                     </div>
-                                    <div class="form-group m-form__group">
-                                        <label for="exampleSelect1">Time</label>
-                                        <select class="form-control m-input m-input--square" name="time">
-                                            <option value="2">2</option>
-                                            <option value="6">6</option>
-                                            <option value="12">12</option>
-                                            <option value="24">24</option>
-                                        </select>
-                                    </div>
                                 </div>
                                 <div class="m-portlet__foot m-portlet__foot--fit">
                                     <div class="m-form__actions">

@@ -52,7 +52,7 @@ class ParsingController extends Controller
             ));
 
             $client->setClient($guzzleClient);
-            $crawler = $client->request('GET', 'https://www.mbetthebookie.win/su/betting/11?periodGroupAllEvents=' . $request['time']);
+            $crawler = $client->request('GET', 'https://www.mbetthebookie.win/su/betting/11?periodGroupAllEvents=12');
 
             $priceClass = '.price';
             $prices = $crawler->filter($priceClass)->each(
@@ -96,7 +96,7 @@ class ParsingController extends Controller
 
                         if (str_replace(' ', '', $team[0]) === explode(' ', $par[14])[1]) {
                             $data['command'] = $par[14] . ' -' . $par[36];
-                            $data['time'] = str_replace(' ', '', $par[27]);
+                            $data['time'] = $par[27];
                         }
                     }
 
