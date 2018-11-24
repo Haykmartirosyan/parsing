@@ -38,6 +38,11 @@
                                         <input type="text" class="form-control m-input m-input--air m-input--pill"
                                                name="count_on_group">
                                     </div>
+                                    <div class="form-group m-form__group">
+                                        <label for="exampleInputEmail1">X-Match</label>
+                                        <input type="number" class="form-control m-input m-input--air m-input--pill"
+                                               name="x_match">
+                                    </div>
                                 </div>
                                 <div class="m-portlet__foot m-portlet__foot--fit">
                                     <div class="m-form__actions">

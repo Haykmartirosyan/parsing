@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\ParsedDataInterface;
+use App\Contracts\xMatchInterface;
 use Goutte\Client;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Http\Request;
@@ -10,14 +11,17 @@ use Illuminate\Http\Request;
 class ParsingController extends Controller
 {
     protected $parsedDataRepo;
+    protected $xMatchRepo;
 
     /**
      * ParsingController constructor.
      * @param ParsedDataInterface $parsedData
+     * @param xMatchInterface $xMatch
      */
-    public function __construct(ParsedDataInterface $parsedData)
+    public function __construct(ParsedDataInterface $parsedData, xMatchInterface $xMatch)
     {
         $this->parsedDataRepo = $parsedData;
+        $this->xMatchRepo = $xMatch;
     }
 
     /**
@@ -108,7 +112,32 @@ class ParsingController extends Controller
             foreach ($prices as $price) {
                 if (!empty($price)) {
                     $data[] = $price;
+                    usort($data, function ($item1, $item2) {
+                        return $item1['price'] <=> $item2['price'];
+                    });
                 }
+            }
+
+            $x = !empty($request['x_match']) ? (integer)$request['x_match'] : 3;
+
+            $xMatches = [];
+            for ($i = 0; $i < $x; $i++) {
+                $xMatches[] = $data[$i];
+                unset($data[$i]);
+            }
+
+            foreach ($xMatches as $index => $xMatch) {
+                $command = isset($xMatch['command']) ? $xMatch['command'] : '';
+                $time = isset($xMatch['time']) ? $xMatch['time'] : '';
+
+                $xMatchData = [
+                    'name' => $xMatch['name'],
+                    'command' => $command,
+                    'time' => $time,
+                    'price' => $xMatch['price'],
+                    'league' => $xMatch['league'],
+                ];
+                $this->xMatchRepo->createOrUpdateData($xMatchData);
             }
 
             /** @var Values $group */
@@ -140,8 +169,9 @@ class ParsingController extends Controller
                 }
             }
             $groupedData = $this->parsedDataRepo->all();
+            $xMatchDatas = $this->xMatchRepo->all();
 
-            return view('parsed-data', compact('groupedData'));
+            return view('parsed-data', compact('groupedData', 'xMatchDatas'));
 
         } catch (\Exception $exception) {
             print_r('Request Failed');

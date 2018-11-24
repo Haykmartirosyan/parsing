@@ -24,9 +24,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-            $this->app->bind(
-                'App\Contracts\ParsedDataInterface',
-                'App\Repositories\ParsedDataRepository'
-            );
+        $this->app->bind(
+            'App\Contracts\ParsedDataInterface',
+            'App\Repositories\ParsedDataRepository'
+        );
+
+        $this->app->bind(
+            'App\Contracts\xMatchInterface',
+            'App\Repositories\xMatchRepository'
+        );
     }
 }
