@@ -59,5 +59,13 @@ class ParsedDataRepository implements ParsedDataInterface
         return $this->model->orderBy('id', 'asc')->get();
     }
 
+    /**
+     * @return mixed
+     */
+    public function deleteAll()
+    {
+        return $this->model->truncate();
+    }
+
 
 }

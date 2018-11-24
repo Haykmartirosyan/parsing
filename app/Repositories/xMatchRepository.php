@@ -58,4 +58,12 @@ class xMatchRepository implements xMatchInterface
     {
         return $this->model->get();
     }
+
+    /**
+     * @return mixed
+     */
+    public function deleteAll()
+    {
+        return $this->model->truncate();
+    }
 }

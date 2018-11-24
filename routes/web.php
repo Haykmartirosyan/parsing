@@ -18,3 +18,4 @@
 Route::get('/', 'ParsingController@settings');
 Route::get('/result', 'ParsingController@index');
 Route::get('/parsing/getResult', 'ParsingController@getResult');
+Route::get('/parsing/delete-result', 'ParsingController@deleteResult')->name('delete-result');

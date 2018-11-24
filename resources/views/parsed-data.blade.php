@@ -13,9 +13,8 @@
                 <!-- END: Subheader -->
                 <div class="m-portlet m-portlet--mobile">
                     <div class="m-portlet__body">
-                        <div><h2 style="display:inline-block" id="time">02:00 </h2>
-                            <h2 style="display:inline-block">минут!</h2>
-                            <a href="" class="btn btn-primary">Обновить страницу</a>
+                        <div>
+                            <a href="{{route('delete-result')}}" class="btn btn-primary">Обновить страницу</a>
                         </div>
                         <div class="m-portlet__body">
                             <!--begin: Datatable -->
@@ -134,35 +133,4 @@
     <div id="m_scroll_top" class="m-scroll-top">
         <i class="la la-arrow-up"></i>
     </div>
-    <script type="text/javascript">
-        setInterval(function () {
-            location.reload()
-        }, 120000);
-    </script>
-
-    <script>
-        function startTimer(duration, display) {
-            var timer = duration, minutes, seconds;
-            setInterval(function () {
-                minutes = parseInt(timer / 60, 10)
-                seconds = parseInt(timer % 60, 10);
-
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                display.textContent = minutes + ":" + seconds;
-
-                if (--timer < 0) {
-                    timer = duration;
-                }
-            }, 1000);
-        }
-
-        window.onload = function () {
-            var twoMinute = 60 * 2,
-                display = document.querySelector('#time');
-            startTimer(twoMinute, display);
-        };
-    </script>
-
 @endsection

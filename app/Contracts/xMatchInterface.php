@@ -14,4 +14,9 @@ interface xMatchInterface
      * @return ParsedData[]|\Illuminate\Database\Eloquent\Collection
      */
     public function all();
+
+    /**
+     * @return mixed
+     */
+    public function deleteAll();
 }

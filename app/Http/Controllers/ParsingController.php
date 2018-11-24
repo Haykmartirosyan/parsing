@@ -180,6 +180,22 @@ class ParsingController extends Controller
     }
 
     /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function deleteResult()
+    {
+        try {
+            $this->parsedDataRepo->deleteAll();
+            $this->xMatchRepo->deleteAll();
+
+            return redirect()->back();
+        } catch (\Exception $exception) {
+            print_r($exception);
+        }
+
+    }
+
+    /**
      * @return \App\Contracts\ParsedData[]|\Illuminate\Database\Eloquent\Collection
      */
     public function getResult()
