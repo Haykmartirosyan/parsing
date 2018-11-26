@@ -44,7 +44,7 @@
                                             <td>{{$datas->command}}</td>
                                             <td>{{$datas->group}}</td>
                                             <td>{{$datas->name}}</td>
-                                            <td>{{number_format($datas->price, 2)}}</td>
+                                            <td>{{$datas->price}}</td>
                                             <td>{{$datas->win}}</td>
                                             <td style="display: none;" nowrap></td>
                                         </tr>
